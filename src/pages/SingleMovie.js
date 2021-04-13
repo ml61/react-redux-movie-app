@@ -22,7 +22,7 @@ const SingleMovie = () => {
 
   useEffect(() => {
     dispatch(getMovieDetails(id));
-    dispatch(getAllGenres());
+    // dispatch(getAllGenres());
   }, []);
 
   if (error) return <Error />;
@@ -30,7 +30,7 @@ const SingleMovie = () => {
 
   return (
     <div className="flex-container-movie">
-      <GenresBar />
+      <GenresBar currentGenreId={null} />
       <IframePoster
         image={singleMovieDetails.image}
         trailer={singleMovieDetails.trailer}

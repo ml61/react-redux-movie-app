@@ -4,7 +4,13 @@ import {
   singleMovieReducer,
   genresReducer,
 } from "./fetchReducers";
-import { isLoadingReducer, errorReducer } from "./uiReducers";
+import {
+  isLoadingReducer,
+  errorReducer,
+  currentPageReducer,
+  totalPagesReducer,
+  currentGenreIdReducer,
+} from "./uiReducers";
 import {
   favouriteMoviesReducer,
   isCurrentMovieInFavouriteReducer,
@@ -19,4 +25,7 @@ export default combineReducers({
   allGenres: genresReducer,
   favouriteMovies: favouriteMoviesReducer,
   isCurrentMovieInFavourite: isCurrentMovieInFavouriteReducer,
+  currentPage: currentPageReducer,
+  totalPages: totalPagesReducer,
+  currentGenreId: currentGenreIdReducer,
 });

@@ -1,12 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import SingleGenre from "./SingleGenre";
-import axios from "axios";
-import { useSelector } from "react-redux";
 
-const GenresBar = () => {
-  const allGenres = useSelector((state) => state.allGenres);
-  const { genres } = allGenres;
-  if (!genres) return;
+import { useDispatch, useSelector } from "react-redux";
+import { getAllGenres } from "../actions";
+
+const GenresBar = ({ currentGenreId }) => {
+  const dispatch = useDispatch();
+  let allGenres = useSelector((state) => {
+    if (state) return state.allGenres;
+    if (!state) return;
+  });
+
+  useEffect(() => {
+    dispatch(getAllGenres());
+  }, []);
+
+  let genres;
+  if (allGenres) {
+    genres = allGenres.genres;
+  }
+  if (!genres) return null;
+
   return (
     <div className="my-flex-item-genres">
       <div className="container">
@@ -15,7 +29,7 @@ const GenresBar = () => {
             return (
               <SingleGenre
                 {...genre}
-                // currentGenre={currentGenre}
+                currentGenreId={currentGenreId}
                 key={genre.id}
               />
             );

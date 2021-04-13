@@ -1,8 +1,11 @@
 import api from "../apis/axiosFetch";
-import { api_key } from "../constants";
-import { popularPath } from "../constants";
 import {
-  GET_POPULAR,
+  api_key,
+  AllGenresMinVoteCount,
+  RandomMovieMinVoteCount,
+} from "../constants";
+import {
+  GET_MOVIES,
   START_LOADING,
   FINISH_LOADING,
   ERROR_LOADING,
@@ -12,6 +15,9 @@ import {
   DELETE_FROM_FAVOURITE,
   CURRENT_MOVIE_IS_FAVOURITE,
   CURRENT_MOVIE_IS_NOT_FAVOURITE,
+  SET_CURRENT_GENRE_ID,
+  CURRENT_PAGE,
+  TOTAL_PAGES,
 } from "./types";
 import {
   formatMovieForCard,
@@ -21,13 +27,38 @@ import {
 export const getPopular = () => async (dispatch) => {
   dispatch({ type: START_LOADING });
   try {
-    const response = await api.get(popularPath, { params: { api_key } });
+    const response = await api.get("/movie/popular", { params: { api_key } });
 
     let data = response.data;
     let { results: movies } = data;
     const newPopular = movies.map((movie) => formatMovieForCard(movie));
 
-    dispatch({ type: GET_POPULAR, payload: newPopular });
+    dispatch({ type: GET_MOVIES, payload: newPopular });
+    dispatch({ type: ERROR_LOADING, payload: false });
+    dispatch({ type: FINISH_LOADING });
+  } catch (err) {
+    dispatch({ type: ERROR_LOADING, payload: err.message });
+    dispatch({ type: FINISH_LOADING });
+  }
+};
+
+export const getMoviesOfGenre = (genreId, currentPage) => async (dispatch) => {
+  dispatch({ type: START_LOADING });
+  try {
+    const response = await api.get("/discover/movie", {
+      params: {
+        api_key,
+        with_genres: genreId,
+        page: currentPage,
+        "vote_count.gte": AllGenresMinVoteCount,
+      },
+    });
+    let { data } = response;
+    dispatch({ type: TOTAL_PAGES, payload: data.total_pages });
+    let { results: movies } = data;
+    const newMoviesOfGenre = movies.map((movie) => formatMovieForCard(movie));
+
+    dispatch({ type: GET_MOVIES, payload: newMoviesOfGenre });
     dispatch({ type: ERROR_LOADING, payload: false });
     dispatch({ type: FINISH_LOADING });
   } catch (err) {
@@ -92,4 +123,12 @@ export const isCurrentMovieInFavourite = (movie, favouriteMovies) => {
   return isCurrentMovieInFavourite
     ? { type: CURRENT_MOVIE_IS_FAVOURITE }
     : { type: CURRENT_MOVIE_IS_NOT_FAVOURITE };
+};
+
+export const changeCurrentPage = (currentPage) => {
+  return { type: CURRENT_PAGE, payload: currentPage };
+};
+
+export const setCurrentGenreId = (genreId) => {
+  return { type: SET_CURRENT_GENRE_ID, payload: genreId };
 };

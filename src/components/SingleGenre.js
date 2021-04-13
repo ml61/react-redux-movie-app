@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SingleGenre = ({ name: genreName, id, currentGenre = "" }) => {
+const SingleGenre = ({ name: genreName, id: genreId, currentGenreId }) => {
   return (
     <li>
       <div className="row">
-        <Link to={`/all-genres/${id}?page=1`}>
+        <Link to={`/all-genres/${genreId}?page=1`}>
           <div
             className={`col genre-name-text border-hover p-0.5 px-4 bg-dark ${
-              currentGenre === genreName ? "genre-name-text-active" : ""
+              currentGenreId === genreId ? "genre-name-text-active" : ""
             } `}
           >
             {genreName}

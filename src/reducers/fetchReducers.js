@@ -1,12 +1,12 @@
 import {
-  GET_POPULAR,
+  GET_MOVIES,
   GET_MOVIE_DETAILS,
   GET_ALL_GENRES,
 } from "../actions/types";
 
 export const moviesReducer = (state = null, action) => {
   switch (action.type) {
-    case GET_POPULAR:
+    case GET_MOVIES:
       return action.payload;
 
     default:
