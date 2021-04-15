@@ -1,4 +1,5 @@
 import api from "../apis/axiosFetch";
+
 import {
   api_key,
   AllGenresMinVoteCount,
@@ -18,11 +19,17 @@ import {
   SET_CURRENT_GENRE_ID,
   CURRENT_PAGE,
   TOTAL_PAGES,
+  SET_RANDOM_MOVIE_QUERIES,
+  SET_RANDOM_MOVIE_ID,
+  SET_SEARCH_QUERY,
 } from "./types";
+
 import {
   formatMovieForCard,
   formatSingleMovieDetails,
-} from "./helperFunctions";
+  getRandomMovieList,
+  getMovieRandomResultPosition,
+} from "../helperFunctions";
 
 export const getPopular = () => async (dispatch) => {
   dispatch({ type: START_LOADING });
@@ -100,6 +107,7 @@ export const getAllGenres = () => async (dispatch) => {
     const response = await api.get(`/genre/movie/list`, {
       params: { api_key },
     });
+    console.log("maxon");
     dispatch({ type: GET_ALL_GENRES, payload: response.data });
     dispatch({ type: ERROR_LOADING, payload: false });
   } catch (err) {
@@ -131,4 +139,73 @@ export const changeCurrentPage = (currentPage) => {
 
 export const setCurrentGenreId = (genreId) => {
   return { type: SET_CURRENT_GENRE_ID, payload: genreId };
+};
+
+export const setRandomMovieQueries = (queriesObj) => {
+  return { type: SET_RANDOM_MOVIE_QUERIES, payload: queriesObj };
+};
+
+export const getRandomMovieId = ({ minYear, minRating, genreId }) => async (
+  dispatch
+) => {
+  dispatch({ type: START_LOADING });
+  try {
+    const response = await getRandomMovieList(minYear, minRating, genreId);
+    const { data } = response;
+
+    let { total_results: totalResults } = data;
+    if (!totalResults) {
+      let err = {
+        message: "We have not any results, please change your request.",
+      };
+      throw err;
+    }
+    const { pageNumber, moviePositionOnPage } = getMovieRandomResultPosition(
+      totalResults
+    );
+
+    const responseFinal = await getRandomMovieList(
+      minYear,
+      minRating,
+      genreId,
+      pageNumber
+    );
+    const { results } = responseFinal.data;
+    const randomMovieId = results[moviePositionOnPage].id;
+    dispatch({ type: SET_RANDOM_MOVIE_ID, payload: randomMovieId });
+    dispatch({ type: ERROR_LOADING, payload: false });
+    dispatch({ type: FINISH_LOADING });
+  } catch (err) {
+    dispatch({ type: ERROR_LOADING, payload: err.message });
+    dispatch({ type: FINISH_LOADING });
+  }
+};
+
+export const setSearchQuery = (query) => {
+  return { type: SET_SEARCH_QUERY, payload: query };
+};
+
+export const getSearchMovies = (searchQuery) => async (dispatch) => {
+  dispatch({ type: START_LOADING });
+  try {
+    const response = await api.get("/search/movie", {
+      params: { api_key, query: searchQuery },
+    });
+
+    if (!response.data.total_results) {
+      let err = {
+        message: `Did not find any movies with "${searchQuery}"`,
+      };
+      throw err;
+    }
+    let { results: movies } = response.data;
+    const newMovies = movies.map((movie) => formatMovieForCard(movie));
+
+    dispatch({ type: GET_MOVIES, payload: newMovies });
+    dispatch({ type: ERROR_LOADING, payload: false });
+    dispatch({ type: FINISH_LOADING });
+  } catch (err) {
+    dispatch({ type: ERROR_LOADING, payload: err.message });
+    dispatch({ type: FINISH_LOADING });
+  }
 };

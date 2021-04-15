@@ -15,6 +15,12 @@ import {
   favouriteMoviesReducer,
   isCurrentMovieInFavouriteReducer,
 } from "./favouriteMoviesReducer";
+
+import {
+  randomMoviesFormReducer,
+  randomMovieIdReducer,
+} from "./randomMoviesReducer";
+import { searchQueryReducer } from "./searchReducer";
 // import { reducer as formReducer } from "redux-form";
 
 export default combineReducers({
@@ -28,4 +34,7 @@ export default combineReducers({
   currentPage: currentPageReducer,
   totalPages: totalPagesReducer,
   currentGenreId: currentGenreIdReducer,
+  randomMovieQueries: randomMoviesFormReducer,
+  randomMovieId: randomMovieIdReducer,
+  searchQuery: searchQueryReducer,
 });

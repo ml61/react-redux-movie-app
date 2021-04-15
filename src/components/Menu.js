@@ -1,5 +1,5 @@
 import React from "react";
-// import SearchForm from "./SearchForm";
+import SearchForm from "./SearchForm";
 import { Link } from "react-router-dom";
 
 const Menu = () => {
@@ -23,7 +23,7 @@ const Menu = () => {
         <Link to="/random-movie" style={{ textDecoration: "none" }}>
           <div className="menu-item">random movie</div>
         </Link>
-        {/* <SearchForm /> */}
+        <SearchForm />
       </nav>
     </header>
   );
