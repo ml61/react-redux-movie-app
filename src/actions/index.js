@@ -77,13 +77,13 @@ export const getMoviesOfGenre = (genreId, currentPage) => async (dispatch) => {
 export const getMovieDetails = (id) => async (dispatch) => {
   dispatch({ type: START_LOADING });
   try {
-    const responseDetails = await api.get(`/movie/${id}`, {
+    let responseDetails = await api.get(`/movie/${id}`, {
       params: { api_key },
     });
-    const responseVideos = await api.get(`/movie/${id}/videos`, {
+    let responseVideos = await api.get(`/movie/${id}/videos`, {
       params: { api_key },
     });
-    const responseCredits = await api.get(`/movie/${id}/credits`, {
+    let responseCredits = await api.get(`/movie/${id}/credits`, {
       params: { api_key },
     });
 
@@ -107,7 +107,6 @@ export const getAllGenres = () => async (dispatch) => {
     const response = await api.get(`/genre/movie/list`, {
       params: { api_key },
     });
-    console.log("maxon");
     dispatch({ type: GET_ALL_GENRES, payload: response.data });
     dispatch({ type: ERROR_LOADING, payload: false });
   } catch (err) {

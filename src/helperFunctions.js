@@ -14,12 +14,16 @@ export const formatMovieForCard = (movie) => {
     poster_path: image,
     id,
   } = movie;
-  overview = overview.length > 210 ? overview.slice(0, 210) + " ..." : overview;
+  if (overview)
+    overview =
+      overview.length > 210 ? overview.slice(0, 210) + " ..." : overview;
+
+  year = year ? year.slice(0, 4) : "No data";
   const newMovie = {
     title,
     rating,
     overview,
-    year: year.slice(0, 4),
+    year,
     image: "https://image.tmdb.org/t/p/w500" + image,
     id,
   };
@@ -38,22 +42,24 @@ export const formatSingleMovieDetails = (details) => {
     vote_average: rating,
     id,
   } = details;
-  year = year.slice(0, 4);
+
+  year = year ? year.slice(0, 4) : "No data";
   countries = countries
     .splice(0, 3)
     .map((item) => item.name)
     .join(", ");
+
   genres = genres
     .splice(0, 3)
-    .map((item) => item.name)
+    .map((item) => item?.name)
     .join(", ");
 
-  const trailer = details.results[0].key;
+  const trailer = details.results[0]?.key;
   const casting = details.cast
     .splice(0, 4)
-    .map((item) => item.name)
+    .map((item) => item?.name)
     .join(", ");
-  const director = details.crew.find((item) => item.job === "Director").name;
+  const director = details.crew.find((item) => item.job === "Director")?.name;
 
   const movieDetails = {
     genres,

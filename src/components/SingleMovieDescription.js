@@ -13,7 +13,7 @@ const SingleMovieDescription = ({
 }) => {
   return (
     <>
-      <h2 className="single-movie-header">{title}</h2>
+      <h2 className="single-movie-header">{title ? title : "No Data"}</h2>
       <div className="info-table-movie mb-2">
         <div className="container">
           <div className="row">
@@ -21,27 +21,31 @@ const SingleMovieDescription = ({
               Runtime
             </div>
             <div className="col genre-name-text p-1 px-2 bg-dark">
-              {runtime} min
+              {runtime ? runtime : "No Data"} min
             </div>
           </div>
           <div className="row">
             <div className="col-3 genre-name-text p-1 px-2 bg-dark d-flex flex-row-reverse">
               Released
             </div>
-            <div className="col genre-name-text p-1 px-2 bg-dark">{year}</div>
+            <div className="col genre-name-text p-1 px-2 bg-dark">
+              {year ? year : "No Data"}
+            </div>
           </div>
           <div className="row">
             <div className="col-3 genre-name-text p-1 px-2 bg-dark d-flex flex-row-reverse">
               Genres
             </div>
-            <div className="col genre-name-text p-1 px-2 bg-dark">{genres}</div>
+            <div className="col genre-name-text p-1 px-2 bg-dark">
+              {genres ? genres : "No Data"}
+            </div>
           </div>
           <div className="row">
             <div className="col-3 genre-name-text p-1 px-2 bg-dark d-flex flex-row-reverse">
               Director
             </div>
             <div className="col genre-name-text p-1 px-2 bg-dark">
-              {director}
+              {director ? director : "No Data"}
             </div>
           </div>
           <div className="row">
@@ -49,7 +53,7 @@ const SingleMovieDescription = ({
               Casting
             </div>
             <div className="col genre-name-text p-1 px-2 bg-dark">
-              {casting}
+              {casting ? casting : "No Data"}
             </div>
           </div>
           <div className="row">
@@ -57,7 +61,7 @@ const SingleMovieDescription = ({
               Country
             </div>
             <div className="col genre-name-text p-1 px-2 bg-dark">
-              {countries}
+              {countries ? countries : "No Data"}
             </div>
           </div>
 
@@ -65,11 +69,13 @@ const SingleMovieDescription = ({
             <div className="col-3 genre-name-text p-1 px-2 bg-dark d-flex flex-row-reverse">
               TMDB rate
             </div>
-            <div className="col genre-name-text p-1 px-2 bg-dark">{rating}</div>
+            <div className="col genre-name-text p-1 px-2 bg-dark">
+              {rating ? rating : "No Data"}
+            </div>
           </div>
         </div>
       </div>
-      <p className="description">{overview}</p>
+      <p className="description">{overview ? overview : "No Data"}</p>
     </>
   );
 };

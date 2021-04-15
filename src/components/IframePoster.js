@@ -8,13 +8,17 @@ const IframeAndPoster = ({ image, trailer }) => {
         src={`https://image.tmdb.org/t/p/w500${image}`}
         alt=""
       />
-      <iframe
-        src={`https://www.youtube.com/embed/${trailer}`}
-        frameBorder="0"
-        allow="autoplay; encrypted-media"
-        allowFullScreen
-        title={trailer}
-      ></iframe>
+      {trailer ? (
+        <iframe
+          src={`https://www.youtube.com/embed/${trailer}`}
+          frameBorder="0"
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+          title={trailer}
+        ></iframe>
+      ) : (
+        <h2>There is no video for this movie </h2>
+      )}
     </div>
   );
 };
